@@ -6,7 +6,7 @@
 /*   By: salabbe <salabbe@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:50:46 by salabbe           #+#    #+#             */
-/*   Updated: 2025/04/07 16:38:10 by salabbe          ###   ########.fr       */
+/*   Updated: 2025/04/09 15:35:22 by salabbe          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	send_char(int pid, char c)
 		tmp = c >> i;
 		if (tmp % 2 == 1)
 			kill(pid, SIGUSR1);
-		else 
+		else
 			kill(pid, SIGUSR2);
 		usleep(300);
 	}
@@ -34,7 +34,7 @@ void	send_char(int pid, char c)
 int	main(int ac, char **av)
 {
 	int	pid;
-	int i;
+	int	i;
 
 	i = 0;
 	if (ac == 3)
@@ -46,8 +46,8 @@ int	main(int ac, char **av)
 			return (0);
 		}
 		while (av[2][i])
-			send_char(av[2][i++], pid);
-		send(av[2][i], pid);
+			send_char(pid, av[2][i++]);
+		send_char(pid, av[2][i]);
 	}
 	else
 		ft_printf("Error in number of argument\n");
