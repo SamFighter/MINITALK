@@ -6,13 +6,17 @@
 #    By: salabbe <salabbe@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/09 14:45:29 by salabbe           #+#    #+#              #
-#    Updated: 2025/04/09 15:17:27 by salabbe          ###   ########.fr        #
+#    Updated: 2025/04/17 17:57:00 by salabbe          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 N_NAME		= client
 
+B_NAME		= client_bonus
+
 SERVER		= server
+
+B_SERVER	= server_bonus
 
 # **************************************************************************** #
 #								    										   #
@@ -26,13 +30,21 @@ MANDA_C		= 	srcs/client/client.c								\
 
 MANDA_S 	=	srcs/server/server.c								\
 
+BONUS_C		= 	srcs/client/client_bonus.c							\
+
+BONUS_S		=	srcs/server/server_bonus.c							\
+
 N_OBJS		=	$(MANDA_C:%.c=.build/%.o)
 S_OBJS		=	$(MANDA_S:%.c=.build/%.o)
+
+B_C_OBJS	=	$(BONUS_C:%.c=.build/%.o)
+B_S_OBJS	=	$(BONUS_S:%.c=.build/%.o)
 
 CC			=	clang
 CFLAGS		=	-Wall -Wextra -Werror -g
 CPPFLAGS	=	-MP	-MMD -Iinclude									\
-				-Iincludes/minitalk.h
+				-Iincludes/minitalk.h								\
+				-Iincludes/minitalk_bonus.h
 				
 LDFLAGS		=	-Llibft -lft
 
@@ -64,6 +76,18 @@ $(SERVER): $(LIBFT) $(S_OBJS)
 
 $(LIBFT):
 		$(MAKE) -C libft
+		
+bonus:	header	$(B_NAME) $(B_SERVER)
+
+$(B_NAME): $(B_C_OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(B_C_OBJS) $(LDFLAGS) -o $(B_NAME)
+	@printf "$(PURPLE)CREATED$(OFF) $(CYAN)$(_BOLD)OBJS$(_RESET) $(CYAN)in /MINITALK/.build$(OFF)\n"
+	@printf "$(PURPLE)CREATED$(OFF) $(CYAN)ADDED $(B_NAME)$(OFF)\n"
+
+$(B_SERVER): $(B_S_OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(B_S_OBJS) $(LDFLAGS) -o $(B_SERVER)
+	@printf "$(PURPLE)CREATED$(OFF) $(CYAN)$(_BOLD)OBJS$(_RESET) $(CYAN)in /MINITALK/.build$(OFF)\n"
+	@printf "$(PURPLE)CREATED$(OFF) $(CYAN)ADDED $(B_SERVER)$(OFF)\n"
 
 .build/%.o: %.c
 		mkdir -p $(@D)
@@ -78,8 +102,11 @@ fclean: clean
 		$(MAKE) -C libft fclean
 		@printf "$(PURPLE)$(_BOLD)ERRADICATION$(OFF)$(_RESET) $(CYAN)$(N_NAME)$(OFF)\n"
 		@printf "$(PURPLE)$(_BOLD)ERRADICATION$(OFF)$(_RESET) $(CYAN)$(SERVER)$(OFF)\n"
+		@printf "$(PURPLE)$(_BOLD)LOOKED FOR ANNIHILATION OF$(OFF)$(_RESET) $(CYAN)$(B_NAME) AND $(B_SERVER)$(OFF)\n"
 		rm -rf $(N_NAME)
 		rm -rf $(SERVER)
+		rm -rf $(B_NAME)
+		rm -rf $(B_SERVER)
 
 re:
 		@printf "$(RED)$(_BOLD)RE-STARTED FROM SCRATCH$(OFF)$(_RESET)\n"
